@@ -1,0 +1,15 @@
+{
+  "name": "api-node",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/pwxyz/api-node.git",
+  "author": "pwxyz <839856946@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.5.3",
+    "koa-bodyparser": "^4.2.1",
+    "koa-cors": "^0.0.16",
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.2.14"
+  }
+}
