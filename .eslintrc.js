@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     "env": {
         "browser": true,
         "commonjs": true,
@@ -6,7 +6,7 @@ export default {
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 2015
+        "ecmaVersion": 2018
     },
     "rules": {
         "indent": [
