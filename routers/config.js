@@ -39,15 +39,14 @@ config.put(USER, async (ctx) => {
   }
   else{
     await user.findByIdAndUpdate(_id, obj);
-    let data = await  user.find();
+    let data = await  user.find({ _id });
     ctx.body = { code:401, message:"修改信息成功", data };
   }
   
-} );
+});
 
 config.get(USER, async (ctx) => {
-  console.log(ctx.state);
-  let data = await user.find().select("password name");
+  let data = await user.find().populate("teams");
   ctx.body = {  code:200, message:"获取用户成功", data };
 } );
 

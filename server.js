@@ -6,24 +6,29 @@ const router = require("./routers");
 const jwt = require("koa-jwt");
 const { cert } = require("./config");
 const secret = require("./utils/secret");
+const catchErr = require("./utils/catchErr");
 
 require("./db");
 
+
+
 const app = new Koa();
 
-app.use(function(ctx, next){
-  return next().catch(err => {
-    if(err.status ===401){
-      ctx.body = { code:401, message:"token不存在或者无效!" };
-    }
-    else {
-      throw err;
-    }
-  });
-});
+// app.use(function(ctx, next){
+//   return next().catch(err => {
+//     if(err.status ===401){
+//       ctx.body = { code:401, message:"token不存在或者无效!" };
+//     }
+//     else {
+//       throw err;
+//     }
+//   });
+// });
 
 
-app.use(jwt({ secret: secret(cert),  passthrough: true  }));
+
+app.use(catchErr);
+app.use(jwt({ secret: secret(cert)  }).unless({ path:[/(^\/public)|(^\/sign$)|(^\/login$)/] }) );
 app.use(bodyParser());
 app.use(router.routes());
 app.use(router.allowedMethods());

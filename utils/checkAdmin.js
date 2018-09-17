@@ -1,16 +1,17 @@
 
+const logger = require("./logger");
 
 module.exports = (ctx , next) =>{
   try{
-    const { isAdmin } = ctx.state.user
-    if(!isAdmin){
-      return ctx.body = { code:401, message:"权限不足！！" }
+    let obj = ctx.state.user;
+    if(obj&&!obj.isAdmin){
+      return ctx.body = { code:401, message:"权限不足！！" };
     }
     else{
-      return  next()
+      return  next();
     }
   }
   catch (err){
-      console.error(err)
+    logger.error(err);
   }
-}
+};
