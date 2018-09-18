@@ -24,12 +24,11 @@ const check = str => {
   else return false;
 };
 
-// !avoidPath.includes(ctx.request.url);
 module.exports = (ctx, next) =>{
   let body = ctx.request.body;
   if("password" in body){
     let message = check(body.password);
-    if(!message){
+    if(!message||avoidPath.includes(ctx.request.url)){
       body.password = secert(body.password);
       return  next();
       
