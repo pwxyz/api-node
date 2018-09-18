@@ -12,12 +12,11 @@ const login = new Router({ prefix:"login" });
 login.post("/", async (ctx) =>{
   const { name, password }= ctx.request.body;
   if(!name||!password){
-    ctx.body = { code: 400, message:"缺少必要的参数" };
+    ctx.body = { code: 400, message:"name或者password不存在" };
   }
   else {
     let obj = await user.findOne({ name }).select("name password isAdmin"); 
-
-    const check = passwords => obj.password === secret(passwords);
+    const check = passwords => obj.password === passwords;
     if(obj&&check(password)){
       let token = jsonwebtoken.sign({name: obj["name"] , _id: obj["_id"], isAdmin: obj["isAdmin"]  }, secret(cert), { expiresIn: "1d" });
       ctx.body = { code: 201, message:"ok", token};

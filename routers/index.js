@@ -6,6 +6,8 @@ const config = require("./config");
 const sign = require("./sign");
 const team = require("./team");
 
+const parsePassword = require("../utils/parsePassword");
+
 const checkAdmin = require("../utils/checkAdmin");
 
 const router = new Router();
@@ -20,9 +22,9 @@ router.get("/",  ctx => {
 
 
 
-router.use("/", login.routes(), login.allowedMethods() );
+router.use("/", parsePassword, login.routes(), login.allowedMethods() );
 router.use("/", checkAdmin, config.routes(), config.allowedMethods()  );
-router.use("/", sign.routes(), sign.allowedMethods()  );
+router.use("/",parsePassword, sign.routes(), sign.allowedMethods()  );
 router.use("/", team.routes(), team.allowedMethods()  );
 
 module.exports = router;

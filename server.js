@@ -14,20 +14,9 @@ require("./db");
 
 const app = new Koa();
 
-// app.use(function(ctx, next){
-//   return next().catch(err => {
-//     if(err.status ===401){
-//       ctx.body = { code:401, message:"token不存在或者无效!" };
-//     }
-//     else {
-//       throw err;
-//     }
-//   });
-// });
-
-
 
 app.use(catchErr);
+// app.use(swagger.init(swaggerInit));
 app.use(jwt({ secret: secret(cert)  }).unless({ path:[/(^\/public)|(^\/sign$)|(^\/login$)/] }) );
 app.use(bodyParser());
 app.use(router.routes());

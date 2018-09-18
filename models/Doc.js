@@ -17,6 +17,6 @@ const DocSchema = new Schema({
   belongTo: { type: String, enum:["team", "personal"], default:"team" },
   personalAuth: { ref: "User", type: Schema.Types.ObjectId, default:[]   },
   teamAuth:{ ref:"Team", type: Schema.Types.ObjectId, default:[] }
-});
+}, { timestamps:true });
 
 module.exports = mongoose.model("Doc", DocSchema);

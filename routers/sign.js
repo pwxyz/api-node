@@ -15,13 +15,12 @@ sign.post("/", async (ctx) => {
     }
     else{
       const obj = await user.findOne({ name });
-
+      
       if(!obj){
         await user.create({ name, password: secret(password) });
         ctx.body = { code:201, message:"新增用户成功" };
       }
       else{
-        console.log("xx");
         ctx.body = { code: 401, message:"用户已存在" };
       }
     }
