@@ -24,7 +24,7 @@ const check = str => {
   else return false;
 };
 
-
+// !avoidPath.includes(ctx.request.url);
 module.exports = (ctx, next) =>{
   let body = ctx.request.body;
   if("password" in body){
@@ -32,7 +32,7 @@ module.exports = (ctx, next) =>{
     if(!message){
       body.password = secert(body.password);
       return  next();
-      !avoidPath.includes(ctx.request.url)
+      
     }
     else {
       ctx.body = { code:202, message, xx: ctx.request };
