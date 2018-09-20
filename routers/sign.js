@@ -4,7 +4,7 @@ const Router = require("koa-router");
 const secret = require("../utils/secret");
 const user = require("../models/User");
 const sign = new Router({ prefix:"sign" });
-const logger = require("../utils/logger");
+const logger = require("../middlewares/logger");
 
 
 sign.post("/", async (ctx) => {

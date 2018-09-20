@@ -6,7 +6,7 @@ const router = require("./routers");
 const jwt = require("koa-jwt");
 const { cert } = require("./config");
 const secret = require("./utils/secret");
-const catchErr = require("./utils/catchErr");
+const catchErr = require("./middlewares/catchErr");
 
 require("./db");
 

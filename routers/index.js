@@ -6,9 +6,9 @@ const config = require("./config");
 const sign = require("./sign");
 const team = require("./team");
 
-const parsePassword = require("../utils/parsePassword");
+const parsePassword = require("../middlewares/parsePassword");
 
-const checkAdmin = require("../utils/checkAdmin");
+const checkAdmin = require("../middlewares/checkAdmin");
 
 const router = new Router();
 
