@@ -8,8 +8,6 @@ module.exports = (ctx, next) => {
   return next()
     .then(() => {
       if(ctx.body===undefined){
-        console.log(ctx.request.body);
-        // logger.error( ctx.request);
         ctx.body = { code:404, message:"not found" };
       }
     }

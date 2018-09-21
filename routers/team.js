@@ -3,14 +3,14 @@
 const Router = require("koa-router");
 const team = require("../models/Team");
 const user = require("../models/User");
-const isArray = require("lodash/isArray");
 const pathTeam = new Router({ prefix:"team" });
+const checkArg = require("../utils/checkArg");
 
 
 //获取所有团队信息
 pathTeam.get("/", async ctx =>{
   // await team.remove({});
-  let data = await team.find().populate("members.info");
+  let data = await team.find().populate("members own");
   // let users = await user.find();
   ctx.body={ code:200, message:"获取信息成功", data };
 });
@@ -19,7 +19,7 @@ pathTeam.get("/", async ctx =>{
 pathTeam.get("/self", async ctx => {
   const { _id } = ctx.state.user;
   let data = await team.find({ members:_id });
-  ctx.body = { code:200, message:"获取所属团队成功", data }
+  ctx.body = { code:200, message:"获取所属团队成功", data };
 } );
 
 //创建新的团队
@@ -31,7 +31,7 @@ pathTeam.post("/", async ctx => {
   }
   else {
     // let membersArr = members.concat({  })
-    let data = await team.create({ members:{ info: _id, kind:2 }, name, logo, abstract });
+    let data = await team.create({ members:_id , own:_id,  name, logo, abstract });
     // await user.update({ teams: data._id });
     ctx.body = { code:200, message:"创建团队成功",data }; 
   }
@@ -45,31 +45,45 @@ pathTeam.get("/:id", async ctx=> {
   ctx.body = { code:200, message:"获取信息成功", data };
 } );
 
-//给团队新增成员
+//给团队新增成员或者修改团队信息
 pathTeam.post("/:id", async ctx=> {
   let id = ctx.params.id;
-  console.log("post", id);
-  let { membersArr } = ctx.request.body;
-  if(!isArray(membersArr)||!("info" in membersArr[0])||!("kind" in membersArr[0]) ){
-    ctx.body = { code:400, message:"参数格式不正确" };
+  
+  let { members, own, name, logo, abstract, teamAdmin  } = ctx.request.body;
+  let _id = ctx.state.user._id;
+  let selectTeam = await team.findById(id);
+  if(selectTeam.own.toString()===_id){
+    //团队拥有者，可以修改团队拥有者，管理员
+    let obj = checkArg({ own, name, logo, abstract  });
+    
+    let objArr = checkArg({ members,teamAdmin  });
+    let objs = {  };
+    if(Object.keys(objArr).length){
+      objs["$addToSet"] = { ...objArr };
+    }
+    if(Object.keys(obj).length){
+      objs["$set"] = { ...obj };
+    }
+    if(Object.keys(objs).length===0){
+      ctx.body = { code:400, message:"参数不正确"};
+    }
+    else{
+      let data = await team.findByIdAndUpdate(id, objs, { new: true, runValidators: true } );
+      ctx.body = { code:201, message:"修改成功", data };
+    }
+
+  }
+  else if(selectTeam.teamAdmin.map(i=> i.toString()).indexOf(_id)!==-1){
+    //团队管理者，可以修改除了拥有者，管理者之外的信息
+    let data = await team.findByIdAndUpdate(id, {  name, logo, abstract  }, { new: true } );
+    ctx.body = { code:201, message:"修改成功", data };
   }
   else{
-    // let data=  await team.findOneAndUpdate({ _id:id }, { $push:{ members:membersArr } }, { new:true } );
-    let data=  await team.findOneAndUpdate({ _id:id }, { $addToSet:{ members:{ $each: membersArr} } }, { new:true } );
-    if(data){
-      ctx.body = { code:200, message:"新增成员成功", data };
-    }
-    else {
-      ctx.body = { code:400, message:"新增成员失败，无效的_id" };
-    }
+    ctx.body={ code:400, message:"权限不足，不是该团队的管理者或者所有者" };
   }
 
 } );
 
-pathTeam.delete("/id", async ctx => {
-  let id = ctx.params.id;
-  // let {  }
-});
 
 //更新团队信息
 pathTeam.put("/:id", async ctx=> {

@@ -2,7 +2,8 @@
 
 const Router = require("koa-router");
 const user = require("../models/User");
-const config = new Router({ prefix:"config" });
+// const config = new Router({ prefix:"config" });
+const config = new Router();
 const secret = require("../utils/secret");
 
 const USER = "/user";

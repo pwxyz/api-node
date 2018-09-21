@@ -21,10 +21,10 @@ router.get("/",  ctx => {
 // })
 
 
-
-router.use("/", parsePassword, login.routes(), login.allowedMethods() );
-router.use("/", checkAdmin, config.routes(), config.allowedMethods()  );
-router.use("/",parsePassword, sign.routes(), sign.allowedMethods()  );
+router.use(parsePassword);
+router.use("/",  login.routes(), login.allowedMethods() );
+router.use("/config", checkAdmin, config.routes(), config.allowedMethods()  );
+router.use("/", sign.routes(), sign.allowedMethods()  );
 router.use("/", team.routes(), team.allowedMethods()  );
 
 module.exports = router;

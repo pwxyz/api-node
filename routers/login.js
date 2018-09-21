@@ -18,7 +18,7 @@ login.post("/", async (ctx) =>{
     let obj = await user.findOne({ name }).select("name password isAdmin"); 
     const check = passwords => obj.password === passwords;
     if(obj&&check(password)){
-      let token = jsonwebtoken.sign({name: obj["name"] , _id: obj["_id"], isAdmin: obj["isAdmin"]  }, secret(cert), { expiresIn: "1d" });
+      let token = jsonwebtoken.sign({name: obj["name"] , _id: obj["_id"], isAdmin: obj["isAdmin"]  }, secret(cert), { expiresIn: "7d" });
       ctx.body = { code: 201, message:"ok", token};
     }
     else {

@@ -3,18 +3,27 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//团队成员级别
-// 0 普通成员
-// 1 管理员
-// 2 所有者
+
+//members 存储团队所有成员信息
+//own  团队归属者，最高权限,
+//teamAdmin  团队管理员，其必须属于members中的一员
 
 const TeamSchema = new Schema({
   name:{ type:String, required:true }, 
   logo:{ type:String, default:null },
   abstract:{ type:String, default:null },
+  own: { type:Schema.Types.ObjectId, ref:"User", required:[true, "own 必须是members中的一员"], validate:{
+    validator: function(id){
+      return this.members.indexOf(id)!==-1 ;
+    }
+  } },
+  teamAdmin:[{  type:Schema.Types.ObjectId, ref:"User", default:null, validate:{
+    validator: function(id){
+      return this.members.indexOf(id)!==-1 ;
+    }
+  } }],
   members:[{
-    info:{type:Schema.Types.ObjectId, ref:"User", default:null},
-    kind: { type:Number, default:0 }
+    type:Schema.Types.ObjectId, ref:"User", default:null
   }]
 }, { timestamps:true });
 
