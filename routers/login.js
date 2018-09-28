@@ -1,4 +1,20 @@
-
+/**
+ * @api {post} /login 登录
+ * @apiGroup Login
+ * @apiParam {String} name 用户名
+ * @apiParam {String{8...10}} password 密码，长度不得小于8位，必须包含大写、小写字母及数字
+ * @apiPermission name
+ * @apiSuccess {String} token 返回token.
+ * @apiSuccess {Number} code 状态码.
+ * @apiSuccess {String} message 提示信息.
+ * @apiSampleRequest /login
+ * @apiSuccessExample { json } 成功返回示意图
+ *{
+ *   "code": 201,
+ *   "message": "ok",
+ *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjIiLCJfaWQiOiI1YjlmNDVlNDViYjlkODM3NjAxNGJjMjgiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTM4MTE2NTgzLCJleHAiOjE1Mzg3MjEzODN9.c42GYe4JleQr2OidXFWjyf-zbuvXl0o1htn74HtjiNc"
+ *}
+ */
 
 const Router = require("koa-router");
 const secret = require("../utils/secret");

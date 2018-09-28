@@ -7,6 +7,12 @@
   "scripts": {
     "start": "nodemon server"
   },
+  "apidoc": 
+    {
+      "title": "Custom apiDoc browser title", 
+      "url" : "localhost:3002",
+      "sampleUrl": "http://localhost:3002" 
+    },
   "license": "MIT",
   "dependencies": {
     "jsonwebtoken": "^8.3.0",

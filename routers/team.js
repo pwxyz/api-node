@@ -6,6 +6,33 @@ const user = require("../models/User");
 const pathTeam = new Router({ prefix:"team" });
 const checkArg = require("../utils/checkArg");
 
+/**
+ * @apiDefine team  团队成员信息
+ * @apiSuccess { Object[]} data 
+ * @apiSuccess { String } data.logo  团队logo.
+ * @apiSuccess { String } data.abstract 团队介绍.
+ * @apiSuccess { String } data.name 团队名
+ */
+
+
+/**
+ * @apiDefine teamxx  团队成员信息
+ * @apiSuccess { Object[]} data 
+ * @apiSuccess { String } data.logo  团队logo.
+ * @apiSuccess { String } data.abstract 团队介绍.
+ * @apiSuccess { String } data.name 团队名
+ */
+
+
+/**
+ * @api {get} /team 获取所有团队信息
+ * @apiGroup Team
+ * @apiHeader {String} Authorization 登陆后返回的token 
+ * @apiSuccess {Number} code 状态码.
+ * @apiSuccess {String} message 提示信息.
+ * @apiUse team
+ * @apiSampleRequest /team
+ */
 
 //获取所有团队信息
 pathTeam.get("/", async ctx =>{

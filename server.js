@@ -1,6 +1,7 @@
 
 
 const Koa = require("koa");
+const cors = require("koa-cors");
 const bodyParser = require("koa-bodyparser");
 const router = require("./routers");
 const jwt = require("koa-jwt");
@@ -17,8 +18,10 @@ const app = new Koa();
 
 app.use(catchErr);
 // app.use(swagger.init(swaggerInit));
+app.use(cors());
 app.use(jwt({ secret: secret(cert)  }).unless({ path:[/(^\/public)|(^\/sign$)|(^\/login$)/] }) );
 app.use(bodyParser());
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 
