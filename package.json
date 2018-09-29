@@ -5,7 +5,11 @@
   "repository": "https://github.com/pwxyz/api-node.git",
   "author": "pwxyz <839856946@qq.com>",
   "scripts": {
-    "start": "nodemon server"
+    "start": "nodemon server",
+    "apidoc": "apidoc -i routers -f .js -o apidoc"
+  },
+  "nodemonConfig": {
+    "ignore": ["test/*", "apidoc/*", "doc/*"]
   },
   "apidoc": 
     {

@@ -12,22 +12,17 @@ const checkArg = require("../utils/checkArg");
  * @apiSuccess { String } data.logo  团队logo.
  * @apiSuccess { String } data.abstract 团队介绍.
  * @apiSuccess { String } data.name 团队名
+ * @apiSuccess { Object[] } data.member 成员
+ * @apiSuccess { string } data.mamber.name 成员名
  */
 
-
-/**
- * @apiDefine teamxx  团队成员信息
- * @apiSuccess { Object[]} data 
- * @apiSuccess { String } data.logo  团队logo.
- * @apiSuccess { String } data.abstract 团队介绍.
- * @apiSuccess { String } data.name 团队名
- */
 
 
 /**
  * @api {get} /team 获取所有团队信息
  * @apiGroup Team
  * @apiHeader {String} Authorization 登陆后返回的token 
+ * @apiPermission token
  * @apiSuccess {Number} code 状态码.
  * @apiSuccess {String} message 提示信息.
  * @apiUse team
@@ -49,7 +44,19 @@ pathTeam.get("/self", async ctx => {
   ctx.body = { code:200, message:"获取所属团队成功", data };
 } );
 
-//创建新的团队
+/**
+ * @api {post} /team 创建新的团队
+ * @apiGroup Team
+ * @apiHeader {String} Authorization 用户token 
+ * @apiParam { String } name 团队名
+ * @apiParam { String } logo 团队logo,图片url
+ * @apiParam { String } abstract 团队宣传格言或介绍
+ * @apiPermission token
+ * @apiSuccess {Number} code 状态码.
+ * @apiSuccess {String} message 提示信息.
+ * @apiUse team
+ * @apiSampleRequest /team
+ */
 pathTeam.post("/", async ctx => {
   const {  name, logo, abstract } = ctx.request.body;
   const _id = ctx.state.user._id;
@@ -65,7 +72,20 @@ pathTeam.post("/", async ctx => {
 
 } );
 
-//获取传入的当前团队信息
+
+/**
+ * @api {post} /team/:id 获取传入的当前团队信息
+ * @apiGroup Team
+ * @apiHeader {String} Authorization 用户token 
+ * @apiParam { String } name 团队名
+ * @apiParam { String } logo 团队logo,图片url
+ * @apiParam { String } abstract 团队宣传格言或介绍
+ * @apiPermission token
+ * @apiSuccess {Number} code 状态码.
+ * @apiSuccess {String} message 提示信息.
+ * @apiUse team
+ * @apiSampleRequest /team
+ */
 pathTeam.get("/:id", async ctx=> {
   let id = ctx.params.id;
   let data = await team.findById(id);
