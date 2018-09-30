@@ -6,19 +6,26 @@
   "author": "pwxyz <839856946@qq.com>",
   "scripts": {
     "start": "nodemon server",
-    "apidoc": "apidoc -i routers -f .js -o apidoc"
+    "api": "apidoc -i routers -f .js -o apidoc"
   },
   "nodemonConfig": {
-    "ignore": ["test/*", "apidoc/*", "doc/*"]
+    "ignore": [
+      "test/*",
+      "apidoc/*",
+      "doc/*"
+    ]
   },
-  "apidoc": 
-    {
-      "title": "Custom apiDoc browser title", 
-      "url" : "localhost:3002",
-      "sampleUrl": "http://localhost:3002" 
-    },
+  "apidoc": {
+    "title": "api-node doc",
+    "url": "localhost:3002",
+    "sampleUrl": "http://localhost:3002"
+  },
   "license": "MIT",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.0.1",
+    "babel-preset-env": "^1.7.0",
+    "dayjs": "^1.7.7",
     "jsonwebtoken": "^8.3.0",
     "koa": "^2.5.3",
     "koa-bodyparser": "^4.2.1",
@@ -27,6 +34,7 @@
     "koa-router": "^7.4.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.2.14",
+    "path-to-regexp": "^2.4.0",
     "winston": "^3.1.0"
   }
 }
