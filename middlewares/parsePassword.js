@@ -34,7 +34,7 @@ module.exports = (ctx, next) =>{
       
     }
     else {
-      ctx.body = { code:202, message };
+      ctx.body = { code:402, message };
     }
   }
   else return next();

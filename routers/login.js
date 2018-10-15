@@ -2,7 +2,7 @@
  * @api {post} /login 登录
  * @apiGroup Login
  * @apiParam {String} name 用户名
- * @apiParam {String{8...10}} password 密码，长度不得小于8位，必须包含大写、小写字母及数字
+ * @apiParam {String} password 密码，长度不得小于8位，必须包含大写、小写字母及数字
  * @apiPermission name
  * @apiSuccess {String} token 返回token.
  * @apiSuccess {Number} code 状态码.

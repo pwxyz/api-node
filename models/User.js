@@ -15,4 +15,13 @@ const userSchema = new Schema({
   avatUrl: { type: String, default: null }
 }, { timestamps:true });
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+userSchema.index({_id:1})
+
+User.on('index', function(error) {
+  // "_id index cannot be sparse"
+  console.log(error);
+});
+
+module.exports = User

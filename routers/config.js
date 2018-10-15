@@ -8,7 +8,7 @@ const config = new Router();
 
 const USER = "/user";
 
-/**@api { post }  /config/user 管理员新增用户
+/**@api {post}  /config/user 管理员新增用户
  * @apiGroup Config
  * @apiHeader { String } Authorization 用户token
  * @apiParam { String } name 用户名

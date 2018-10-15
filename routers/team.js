@@ -34,14 +34,13 @@ const { limit } = require("../config");
  * @apiUse team
  * @apiSampleRequest /team
  */
-const queryStringToObj = require("../utils/queryStringToObj");
+
 pathTeam.get("/", async ctx =>{
-  // await team.remove({});
-  const limits = ctx.params.limit || limit;
-  const page = ctx.params.page || 1;
-  console.log(limits, page, queryStringToObj(ctx.request.url));
-  let data = await team.find().populate("members own");
-  // let users = await user.find();
+  const limits = ctx.state.url.limit || limit;
+  const page = ctx.state.url.page || 1;
+  const skip = (page-1)*limits
+  console.log(limits, page)
+  let data = await team.find().populate({ path:"members", select:"name avatUrl" }).populate({ path:"own", select:"name avatUrl" }).skip(skip).limit(limits);
   ctx.body={ code:200, message:"获取信息成功", data };
 });
 
@@ -87,6 +86,35 @@ pathTeam.post("/", async ctx => {
     }
   }
 
+} );
+
+/**
+ * @api {del} /team/:id  解散团队
+ * @apiGroup Team 
+ * @apiHeader {String} Authorization token
+ * @apiParam { String } id 团队id
+ * @apiPermission admin or teamown
+ * @apiSuccess {Number} code 状态码
+ * @apiSuccess { String } message 提示信息
+ * @apiVersion 0.1.0
+ */
+
+pathTeam.delete("/:id", async ctx => {
+  let teamId = ctx.params.id ;
+  const { _id, isAdmin } = ctx.state.user;
+
+  const targTeam = await team.findById(teamId);
+  let isOwn = targTeam ? targTeam.own === _id : false ;
+  if(!targTeam){
+     ctx.body = { code:401, message:"该团队已不存在！！" }
+  }
+  else if(isAdmin||isOwn){
+      await team.findByIdAndDelete(teamId)
+      ctx.body = { code: 201, message:"删除成功" }
+  }
+  else {
+    ctx.body = { code:407, message:"权限不足，删除失败！", team }
+  }
 } );
 
 

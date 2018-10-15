@@ -5,7 +5,7 @@ module.exports = (ctx , next) =>{
   try{
     let obj = ctx.state.user;
     if(obj&&!obj.isAdmin){
-      return ctx.body = { code:401, message:"权限不足！！" };
+      return ctx.body = { code:406, message:"权限不足！！" };
     }
     else{
       return  next();

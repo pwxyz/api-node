@@ -19,7 +19,7 @@ module.exports = (ctx, next) => {
         ctx.body = { code:500, message:err.message || "service error" };
       }
       else {
-        ctx.body = { code:401, message:"token不存在或者无效!" };
+        ctx.body = { code:405, message:"token不存在或者无效!" };
       } 
     }) ;
 };
