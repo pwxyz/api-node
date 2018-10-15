@@ -4,21 +4,34 @@ const Router = require("koa-router");
 const user = require("../models/User");
 // const config = new Router({ prefix:"config" });
 const config = new Router();
-const secret = require("../utils/secret");
+// const secret = require("../utils/secret");
 
 const USER = "/user";
 
+/**@api { post }  /config/user 管理员新增用户
+ * @apiGroup Config
+ * @apiHeader { String } Authorization 用户token
+ * @apiParam { String } name 用户名
+ * @apiParam { String } password 密码
+ * @apiParam { String } [avatUrl] 头像，默认null
+ * @apiPermission adminToken
+ * @apiSuccess { Number } code 状态码
+ * @apiSuccess { String } message 提示信息
+ * @apiSampleRequest /config/user
+ * @apiVersion 0.1.0
+ * */ 
+
 config.post(USER, async ctx => {
-  const { name, password } = ctx.request.body;
-  // const err = 
+  const { name, password, avatUrl=null } = ctx.request.body;
+  // console.log(password);
   try{
     let data = await user.findOne({ name });
     if(data){
       ctx.body = { code:202, message:"当前用户名已存在！" };
     }
     else {
-      await user.create({ name, password: secret(password) });
-      ctx.body = { code:201, message: "用户新增成功！", data };
+      await user.create({ name, password, avatUrl });
+      ctx.body = { code:201, message: "用户新增成功！" };
     }
     
   }
