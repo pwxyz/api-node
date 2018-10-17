@@ -38,16 +38,48 @@ const { limit } = require("../config");
 pathTeam.get("/", async ctx =>{
   const limits = ctx.state.url.limit || limit;
   const page = ctx.state.url.page || 1;
-  const skip = (page-1)*limits
-  console.log(limits, page)
-  let data = await team.find().populate({ path:"members", select:"name avatUrl" }).populate({ path:"own", select:"name avatUrl" }).skip(skip).limit(limits);
-  ctx.body={ code:200, message:"获取信息成功", data };
+  const skip = (page-1)*limits;
+  let start = + new Date();
+  // let data = await team.find().populate({ path:"members", select:"name avatUrl" }).populate({ path:"own", select:"name avatUrl" }).skip(skip).limit(limits);
+  let data = await team.aggregate([ 
+    // { $lookup: { from:"users", localField:"members", foreignField:"_id", as:"members", } }
+    {$lookup:
+    {
+      from: "users",
+      let: { membersId: "$members",  },
+      pipeline: [
+         { $match:
+            { $expr:
+              {
+                _id: "membersId"
+              }
+            }
+         },
+         { $project: { name: 1, avatUrl:1 } }
+      ],
+      as: "members"
+    }
+    } 
+   ])
+  ctx.body={ code:200,time: +new Date() - start, message:"获取信息成功", data };
 });
 
 //获取已加入的所有团队信息
+/**
+ * @api {get} /team/self 获取当前已加入那些团队
+ * @apiGroup Team
+ * @apiHeader {String} Authorization token
+ * @apiPermission token
+ * @apiSuccess {Number} code 状态码
+ * @apiSuccess {String} message 提示信息
+ * @apiSUccess {Obejct[]} data
+ * @apiSuccess {String} data.name 团队名称
+ * @apiSuccess {String} data.logo 团队url
+ */
 pathTeam.get("/self", async ctx => {
   const { _id } = ctx.state.user;
-  let data = await team.find({ members:_id });
+  let data = await team.find({ members:_id }).select("name logo");
+  
   ctx.body = { code:200, message:"获取所属团队成功", data };
 } );
 
