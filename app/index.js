@@ -1,3 +1,4 @@
+"use strict";
 
 const Router = require("koa-router");
 // const user = require("../models/User");
@@ -9,12 +10,11 @@ const team = require("./team");
 const parsePassword = require("../middlewares/parsePassword");
 
 const checkAdmin = require("../middlewares/checkAdmin");
-const qsUrl = require("../middlewares/qsUrl");
 
 const router = new Router();
 
-router.get("/",  ctx => {
-  ctx.body= { api:"welcome to web-api" };
+router.get("/", ctx => {
+  ctx.body = { api: "welcome to web-api" };
 });
 
 // router.get("/", function(ctx){
@@ -23,10 +23,9 @@ router.get("/",  ctx => {
 
 
 router.use(parsePassword);
-router.use(qsUrl);
-router.use("/",  login.routes(), login.allowedMethods() );
-router.use("/config", checkAdmin, config.routes(), config.allowedMethods()  );
-router.use("/", sign.routes(), sign.allowedMethods()  );
-router.use("/", team.routes(), team.allowedMethods()  );
+router.use("/", login.routes(), login.allowedMethods());
+router.use("/config", checkAdmin, config.routes(), config.allowedMethods());
+router.use("/", sign.routes(), sign.allowedMethods());
+router.use("/", team.routes(), team.allowedMethods());
 
 module.exports = router;
